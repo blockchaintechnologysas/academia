@@ -57,6 +57,44 @@ Este proyecto puede exponerse mediante Nginx actuando como proxy inverso y asegu
    ```
    Certbot añadirá automáticamente los bloques `listen 443 ssl` y la redirección de HTTP a HTTPS. Para renovar de forma automática se instala un `systemd` timer por defecto, pero puedes probarlo con `sudo certbot renew --dry-run`.
 
+## Despliegue como servicio con systemd (puerto 3324)
+Puedes mantener el frontend sirviendo el build estático con `npm run preview` como un servicio de `systemd` que escuche en el puerto 3324.
+
+1. **Preparar el proyecto**
+   ```bash
+   cd /ruta/al/proyecto/academia
+   npm ci
+   npm run build
+   ```
+
+2. **Crear el servicio** en `/etc/systemd/system/academia-frontend.service` (ajusta la ruta del proyecto y el usuario que ejecutará el servicio):
+   ```ini
+   [Unit]
+   Description=Academia frontend (Vite preview)
+   After=network.target
+
+   [Service]
+   Type=simple
+   WorkingDirectory=/ruta/al/proyecto/academia
+   ExecStart=/usr/bin/npm run preview -- --host --port 3324
+   Restart=always
+   Environment=NODE_ENV=production
+   User=www-data
+   Group=www-data
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+3. **Recargar y habilitar** el servicio:
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now academia-frontend
+   sudo systemctl status academia-frontend
+   ```
+
+El servicio ejecutará el servidor de Vite en `http://0.0.0.0:3324`, listo para colocarlo detrás de Nginx o consumirse directamente en entornos internos.
+
 
 ## Flujo para apps móviles
 1. Ejecuta `npm install` para preparar el entorno.
