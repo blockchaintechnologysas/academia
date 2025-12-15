@@ -28,7 +28,7 @@ Este proyecto puede exponerse mediante Nginx actuando como proxy inverso y asegu
    sudo apt install nginx certbot python3-certbot-nginx
    ```
 
-2. **Crear un bloque de servidor para el subdominio** (ejemplo: `admin.granacoin.com.co` sirviendo el frontend en el puerto interno `7423`):
+2. **Crear un bloque de servidor para el subdominio** (ejemplo: `academia.blockchaintechnologysas.com` sirviendo el frontend en el puerto interno `3324`):
    ```nginx
    server {
        listen 80;
