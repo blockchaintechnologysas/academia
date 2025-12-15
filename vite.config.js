@@ -10,6 +10,7 @@ export default defineConfig({
   },
   preview: {
     host: true,
-    port: 3324
+    port: 3324,
+    allowedHosts: ['academia.blockchaintechnologysas.com']
   }
 });
