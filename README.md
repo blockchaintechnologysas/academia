@@ -76,7 +76,7 @@ Puedes mantener el frontend sirviendo el build estático con `npm run preview` c
 
    [Service]
    Type=simple
-   WorkingDirectory=/ruta/al/proyecto/academia
+   WorkingDirectory=/opt/academia
    ExecStart=/usr/bin/npm run preview 
    Restart=always
    Environment=NODE_ENV=production
