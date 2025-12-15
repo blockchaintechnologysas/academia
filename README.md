@@ -28,7 +28,8 @@ Este proyecto puede exponerse mediante Nginx actuando como proxy inverso y asegu
    sudo apt install nginx certbot python3-certbot-nginx
    ```
 
-2. **Crear un bloque de servidor para el subdominio** (ejemplo: `academia.blockchaintechnologysas.com` sirviendo el frontend en el puerto interno `3324`):
+2. **Crear un bloque de servidor para el subdominio** (ejemplo: `academia.blockchaintechnologysas.com` sirviendo el frontend en el puerto interno `3324`)
+
    ```nginx
    server {
        listen 80;
@@ -51,7 +52,7 @@ Este proyecto puede exponerse mediante Nginx actuando como proxy inverso y asegu
    sudo nginx -t && sudo systemctl reload nginx
    ```
 
-3. **Emitir el certificado SSL con Certbot**:
+4. **Emitir el certificado SSL con Certbot**:
    ```bash
    sudo certbot --nginx -d academia.blockchaintechnologysas.com
    ```
@@ -67,7 +68,7 @@ Puedes mantener el frontend sirviendo el build estático con `npm run preview` c
    npm run build
    ```
 
-2. **Crear el servicio** en `/etc/systemd/system/academia-frontend.service` (ajusta la ruta del proyecto y el usuario que ejecutará el servicio):
+2. **Crear el servicio** en `/etc/systemd/system/academia.service` (ajusta la ruta del proyecto y el usuario que ejecutará el servicio):
    ```ini
    [Unit]
    Description=Academia frontend (Vite preview)
@@ -76,11 +77,10 @@ Puedes mantener el frontend sirviendo el build estático con `npm run preview` c
    [Service]
    Type=simple
    WorkingDirectory=/ruta/al/proyecto/academia
-   ExecStart=/usr/bin/npm run preview -- --host --port 3324
+   ExecStart=/usr/bin/npm run preview 
    Restart=always
    Environment=NODE_ENV=production
-   User=www-data
-   Group=www-data
+   User=academia
 
    [Install]
    WantedBy=multi-user.target
@@ -89,8 +89,8 @@ Puedes mantener el frontend sirviendo el build estático con `npm run preview` c
 3. **Recargar y habilitar** el servicio:
    ```bash
    sudo systemctl daemon-reload
-   sudo systemctl enable --now academia-frontend
-   sudo systemctl status academia-frontend
+   sudo systemctl enable --now academia.service
+   sudo systemctl status academia.service
    ```
 
 El servicio ejecutará el servidor de Vite en `http://0.0.0.0:3324`, listo para colocarlo detrás de Nginx o consumirse directamente en entornos internos.
